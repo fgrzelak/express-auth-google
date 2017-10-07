@@ -8,8 +8,9 @@ html(lang="en")
     body
         include ./navbar.pug
         div.container
-            if (authorized)
-                h1 Welcome, authorized user
+            if (user)
+                h1 Welcome, #{user.displayName}
+                a(href="/logout") Logout
             else
                 div.jumbotron 
                     h2 You're not logged in!

@@ -1,35 +1,54 @@
 var express = require('express');
-var bodyParser = require('body-parser');
+var passport = require('passport');
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var config = require('./config');
+
 var app = express();
-var userData = {};
+var googleProfile = null;
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+    done(null, obj);
+});
+passport.use(new GoogleStrategy({
+    clientID: config.GOOGLE_CLIENT_ID,
+    clientSecret:config.GOOGLE_CLIENT_SECRET,
+    callbackURL: config.CALLBACK_URL
+    },
+    function(accessToken, refreshToken, profile, cb) {
+        googleProfile = profile;
+        cb(null, profile);
+    }
+));
 
 app.set('view engine', 'pug');
 app.set('views', './views');
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.urlencoded({ extended: true }));
-
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get('/', (req, res) => { 
-    res.render('index', userData); 
-});
-
-app.post('/', (req, res) => {
-    userData = req.body;
-    if (userData.inputName) userData.authorized = true; 
-    console.log(userData);
-    res.render('index', userData);
+    res.render('index', { user: googleProfile }); 
 });
 
 app.get('/logout', (req, res) => {
-    userData = {};
-    res.render('auth/google');
+    googleProfile = null;
+    res.redirect('/');
 });
 
-app.get('/auth/google', (req, res) => {
-    res.render('auth/google');
-});
+app.get('/auth/google', 
+    passport.authenticate('google', {
+        scope: ['profile', 'email']
+    })
+);
 
+app.get('/auth/google/callback', 
+    passport.authenticate('google', {
+        successRedirect: '/',
+        failureRedirect: '/'
+    })
+);
 
 app.listen(3000);
 

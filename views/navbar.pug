@@ -2,8 +2,10 @@ nav.navbar.navbar-light.bg-light
     a.navbar-brand(href="/") My super-duper app
     ul.nav.navbar-nav
         li
-            if (authorized)
-                span Logged in as #{inputName} 
-                    a(href="/logout") Logout
+            if (user)
+                span Logged in as 
+                    img(src=user.photos[0].value, alt=user.displayName)
+                    b #{user.displayName} 
+                    
             else
                 a(href="/auth/google/") Please login
