@@ -1,0 +1,9 @@
+nav.navbar.navbar-light.bg-light
+    a.navbar-brand(href="/") My super-duper app
+    ul.nav.navbar-nav
+        li
+            if (authorized)
+                span Logged in as #{inputName} 
+                    a(href="/logout") Logout
+            else
+                a(href="/auth/google/") Please login

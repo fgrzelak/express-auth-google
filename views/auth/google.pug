@@ -1,0 +1,17 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css")
+        title Authorize with Google
+    body
+        include ../navbar.pug
+        div.container
+            div.jumbotron
+                form(action="/" method="POST")
+                    h3 Authorize with Google
+                    input.form-control(type="email" id="inputName" name="inputName" placeholder="e-mail" autofocus)
+                    input.form-control(type="password" id="inputPassword" name="inputPassword" placeholder="password")
+                    button.btn.btn-primary.btn-block(type="submit") Authorize with Google
